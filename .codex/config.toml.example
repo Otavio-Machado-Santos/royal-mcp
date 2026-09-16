@@ -1,0 +1,22 @@
+# Royal MCP — exemplo para Codex (OpenAI)
+#
+# Uso:
+#   mkdir -p .codex
+#   cp .codex/config.toml.example .codex/config.toml
+#   cargo build --release
+#   cp config.example.toml config.toml   # edite document_path e escopo
+#
+# O Codex mescla .codex/config.toml do projeto com ~/.codex/config.toml.
+# O projeto precisa estar marcado como "trusted" na primeira execução.
+#
+# Docs: https://developers.openai.com/codex/config-sample
+# Guia completo: docs/mcp-integration.md
+
+[mcp_servers.royal]
+enabled = true
+command = "./target/release/royal-mcp"
+args = []
+startup_timeout_sec = 30
+
+[mcp_servers.royal.env]
+ROYAL_MCP_CONFIG = "./config.toml"

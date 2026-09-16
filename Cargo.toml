@@ -1,0 +1,27 @@
+[package]
+name = "royal-mcp"
+version = "0.1.0"
+edition = "2024"
+description = "A credential-isolating MCP trust boundary for operating SSH hosts from Royal TS/TSX inventories"
+license = "Apache-2.0"
+repository = "https://github.com/Otavio-Machado-Santos/royal-mcp"
+readme = "README.md"
+keywords = ["mcp", "ssh", "royal-ts", "infrastructure", "ai-agents"]
+categories = ["command-line-utilities", "network-programming"]
+
+[dependencies]
+anyhow = "1.0.102"
+base64 = "0.22"
+rmcp = { version = "1.7.0", features = ["server", "macros", "transport-io", "elicitation", "schemars"] }
+russh = "0.61.1"
+russh-sftp = "2.3.0"
+schemars = "1.2.1"
+secrecy = "0.10.3"
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.150"
+sha2 = "0.11.0"
+tokio = { version = "1.52.3", features = ["macros", "rt-multi-thread", "io-std", "io-util", "sync", "time", "process"] }
+toml = "1.1.2"
+tracing = "0.1.44"
+tracing-subscriber = "0.3.23"
+zeroize = "1.8.2"

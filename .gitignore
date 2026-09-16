@@ -1,0 +1,55 @@
+# Build artifacts
+/target
+**/*.rs.bk
+*.pdb
+
+# Runtime data — may contain sensitive information
+/audit.log
+/known_hosts
+
+# Local operational artifacts — may contain environment data or secrets
+/.tmp/
+/tmp/
+/deploy/
+/reports/
+/scripts/
+/target 2/
+
+# Incident/operational notes — contain client names, IPs, and cleartext creds.
+# Keep these local; never commit. (Move secrets to the Royal vault.)
+/.cursor/skills/
+/docs/handoff-*.md
+
+# Local config — contains real host names, paths, and infrastructure details.
+# Use config.example.toml as template.
+/config.toml
+/config.local.toml
+
+# MCP integration — contains machine-specific absolute paths.
+# Use .mcp.example.json as template.
+/.mcp.json
+
+# Royal TS documents — contain credentials
+*.rtsz
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*.key
+*.ppk
+*.pfx
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local Claude Code runtime artifacts
+.claude/

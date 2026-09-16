@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "royal": {
+      "type": "stdio",
+      "command": "./target/release/royal-mcp",
+      "args": [],
+      "env": {
+        "ROYAL_MCP_CONFIG": "./config.toml"
+      }
+    }
+  }
+}

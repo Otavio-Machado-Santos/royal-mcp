@@ -1,0 +1,68 @@
+# Royal MCP — Configuration Template
+# Copy to config.toml and adjust paths for your environment.
+#
+# NEVER commit config.toml — it contains real host names and paths to
+# credential documents. config.toml is listed in .gitignore.
+
+# Royal TS/TSX document (.rtsz) — source of truth for the SSH inventory.
+document_path = "/path/to/your/Connections.rtsz"
+
+# Path to PowerShell Core (pwsh). macOS Homebrew: /opt/homebrew/bin/pwsh
+pwsh_path = "/opt/homebrew/bin/pwsh"
+
+# Inventory script (emits JSON of hosts, no secrets).
+inventory_script = "ps/inventory.ps1"
+
+# Credential resolution script (emits the secret of ONE host; captured in
+# memory by the MCP, never logged).
+resolve_script = "ps/resolve.ps1"
+
+# Append-only audit log with hash-chain.
+audit_log = "audit.log"
+
+# Host key pinning file (persistent TOFU). Created on first connection;
+# divergence on subsequent connections refuses the connection (anti-MITM).
+known_hosts = "known_hosts"
+
+# How human approval for state-changing file ops (file_put/file_edit) is obtained:
+#   "elicitation" (recommended) — server forces an MCP approval dialog and
+#     denies the mutation when the client cannot render or accept it.
+#   "agent" — compatibility mode for clients without elicitation support. The
+#     server trusts the client/agent to have obtained approval in chat.
+approval_mode = "elicitation"
+
+[scope]
+# Three ways to scope what the agent can see:
+#   1) By exact host name      → allow_host_names = ["my-server-1", "my-server-2"]
+#   2) By folder/client        → allow_folders   = ["ClientA", "ClientB"]  (substring, case-insensitive)
+#   3) ALL hosts (escape hatch)→ allow_folders   = ["ALL_HOSTS"]  (or "*", in either list)
+# A host is visible if it matches by NAME (1) OR by FOLDER (2).
+# Everything in Royal is treated as prod. Expand consciously.
+#
+# WARNING: "ALL_HOSTS" / "*" exposes the ENTIRE document to the agent and
+# removes the scope restriction. Use only when you really mean every host.
+allow_host_names = ["my-server-1", "my-server-2"]
+allow_folders = []
+
+[limits]
+connect_timeout_secs = 10
+command_timeout_secs = 30
+output_cap_bytes = 1048576      # 1 MiB per stream
+max_exec_per_minute = 30        # 0 = disabled
+
+[files]
+# Paths containing any of these patterns are blocked (anti-exfiltration).
+deny_path_patterns = [
+    "shadow", "gshadow", "id_rsa", "id_ed25519", "id_ecdsa", "id_dsa",
+    ".pem", ".key", ".ppk", ".pfx", "/etc/ssl/private",
+    "authorized_keys", ".aws/credentials", ".ssh/known_hosts",
+    "sudoers", "/proc/kcore", "/dev/mem",
+]
+# Extra write-only guards for persistence-oriented system locations.
+deny_write_patterns = [
+    "/etc/cron", "crontab", "/etc/systemd", ".bashrc", ".bash_profile",
+    ".profile", ".zshrc", ".ssh/rc", "ld.so.preload", "pam.d",
+    "/etc/passwd", "/etc/sudoers",
+]
+max_get_bytes = 1048576         # read cap (file_get)
+max_put_bytes = 1048576         # write cap (file_put)
